@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Построение дерева вывода</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="sections">
+    <div class="block">
+        <h1>Введите данные для грамматики</h1>
+        <form name="registerForm">
+
+            <label><b>VT</b> (алфавит)</label></br>
+            <input type="text" name="vt" /></br></br>
+
+            <label><b>VN</b> (нетерминальные символы)</label></br>
+            <input type="text" name="vn" /></br></br>
+
+            <label><b>P</b> (правила)</label></br>
+            <input type="text" name="p1" /><i title="Удалить правило" class="fa fa-trash" aria-hidden="true"></i></br>
+            <i title="Добавить правило" class="fa fa-plus" aria-hidden="true"></i></br>
+
+            <label><b>S</b> (целевой символ)</label></br>
+            <select name="s" id="">
+                <option value="no">Не выбран</option>
+            </select>
+
+            <br/><br/>
+
+            <button type="submit" id="submit">Построить</button>
+        </form>
+    </div>
+    <div class="block">
+        Здесь будет вывод результата
+    </div>
+</div>
+<script src="/mainScript.js"></script>
+<script src="https://use.fontawesome.com/76adb912f2.js"></script>
+</body>
+<html>
