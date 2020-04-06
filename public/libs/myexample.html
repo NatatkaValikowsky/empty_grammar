@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title> Tennis draw example </title>
+    <link rel="stylesheet" href="Treant.css">
+
+    <style>
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+        table { border-collapse:collapse; border-spacing:0; }
+        fieldset,img { border:0; }
+        address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+        caption,th { text-align:left; }
+        h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+        q:before,q:after { content:''; }
+        abbr,acronym { border:0; }
+
+        body { background: #fff;  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
+        /* optional Container STYLES */
+        .chart { height: 600px; width: 900px; margin: 5px; margin: 15px auto; border: 3px solid #DDD; border-radius: 3px; }
+
+        .tennis-draw {
+            font-size: 10px;
+            width: 100px;
+        }
+
+        .tennis-draw.winner { height: 38px; }
+        .tennis-draw.winner:hover { background: url('trophy.png') right 0 no-repeat; }
+        .tennis-draw.winner .node-name { padding-left: 10px; margin-top: 1px; display: block; }
+
+        .tennis-draw .node-name { padding: 2px; white-space: pre; color: #00AFF0; }
+        .tennis-draw .node-desc { padding: 2px; color: #999; }
+
+        .tennis-draw.first-draw .node-title,
+        .tennis-draw.first-draw .node-name,
+        .tennis-draw.first-draw img { position: absolute; top: -8px; }
+        .tennis-draw.first-draw:hover img { width: 20px; top: -12px; }
+
+        .tennis-draw.first-draw { width: 165px; height: 20px; }
+        .tennis-draw.first-draw img { margin: 3px 4px 0 0; left: 25px; }
+        .tennis-draw.first-draw .node-title { margin-top: 3px; }
+        .tennis-draw.first-draw .node-name { width: 113px; padding-left: 50px; }
+        .tennis-draw.first-draw.bye .node-name { color: #999; }
+    </style>
+</head>
+<body>
+<div class="chart" id="OrganiseChart6"></div>
+<script src="vendor/raphael.js"></script>
+<script src="Treant.js"></script>
+
+<script>
+    var tree_structure = {
+        chart: {
+            container: "#OrganiseChart6",
+            levelSeparation:    20,
+            siblingSeparation:  15,
+            subTeeSeparation:   15,
+            rootOrientation: "EAST",
+
+            node: {
+                HTMLclass: "tennis-draw",
+                drawLineThrough: true
+            },
+            connectors: {
+                type: "straight",
+                style: {
+                    "stroke-width": 2,
+                    "stroke": "#ccc"
+                }
+            }
+        },
+
+        nodeStructure: {
+            text: {
+                name: {val: "Djokovic, Novak", href: "http://www.atpworldtour.com/Tennis/Players/Top-Players/Novak-Djokovic.aspx"}
+            },
+            HTMLclass: "winner",
+            children: [
+                {
+                    text: {
+                        name: "Djokovic, Novak",
+                        desc: "4-6, 6-2, 6-2"
+                    },
+                    children: [
+                        {
+                            text: {
+                                name: "Djokovic, Novak",
+                                desc: "4-6, 6-1, 6-4"
+                            },
+                            children: [
+                                {
+                                    text: {
+                                        name: "Djokovic, Novak",
+                                        desc: "4-6, 6-1, 6-4"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Djokovic, Novak",
+                                                title: 1
+                                            },
+                                            image: "flags/srb.jpg",
+                                            HTMLclass: "first-draw",
+
+                                        },
+                                        {
+                                            text: {
+                                                name: "Bye",
+                                                title: 2
+                                            },
+                                            HTMLclass: "first-draw bye"
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: {
+                                        name: "Youzhny, Mikhail",
+                                        desc: "6-4, 6-0"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Youzhny, Mikhail",
+                                                title: 3
+                                            },
+                                            image: "flags/rus.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Gimeno-Traver, Daniel",
+                                                title: 4
+                                            },
+                                            image: "flags/esp.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            text: {
+                                name: "Monaco, Juan",
+                                desc: "6-0, 3-6, 6-3"
+                            },
+                            children: [
+                                {
+                                    text: {
+                                        name: "Gulbis, Ernests",
+                                        desc: "4-6, 6-2, 6-3"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Gulbis, Ernests",
+                                                title: 5
+                                            },
+                                            image: "flags/lat.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Isner, John",
+                                                title: 6
+                                            },
+                                            image: "flags/usa.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: {
+                                        name: "Monaco, Juan",
+                                        desc: "6-4, 6-0"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Klizan, Martin",
+                                                title: 7
+                                            },
+                                            image: "flags/slo.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Monaco, Juan",
+                                                title: 8
+                                            },
+                                            image: "flags/arg.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    text: {
+                        name: "Nieminen, Jarkko",
+                        desc: "6-3, 1-6, 7-6(3)"
+                    },
+                    children: [
+                        {
+                            text: {
+                                name: "Nieminen, Jarkko",
+                                desc: "4-6, 6-1, 6-4"
+                            },
+                            children: [
+                                {
+                                    text: {
+                                        name: "Raonic, Milos",
+                                        desc: "6-1, 6-4"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Raonic, Milos",
+                                                title: 9
+                                            },
+                                            image: "flags/can.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Benneteau, Julien",
+                                                title: 10
+                                            },
+                                            image: "flags/fra.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: {
+                                        name: "Nieminen, Jarkko",
+                                        desc: "6-1, 6-2"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Nieminen, Jarkko",
+                                                title: 11
+                                            },
+                                            image: "flags/fin.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Troicki, Viktor",
+                                                title: 12
+                                            },
+                                            image: "flags/srb.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            text: {
+                                name: "Del Potro, Juan Martin",
+                                desc: "6-2, 6-4"
+                            },
+                            children: [
+                                {
+                                    text: {
+                                        name: "Dolgopolov, Alexandr",
+                                        desc: "4-6, 6-2, 6-3"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Dolgopolov, Alexandr",
+                                                title: 13
+                                            },
+                                            image: "flags/ukr.jpg",
+                                            HTMLclass: "first-draw"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Tomic, Bernard",
+                                                title: 14
+                                            },
+                                            image: "flags/aus.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: {
+                                        name: "Del Potro, Juan Martin",
+                                        desc: "6-4, 6-0"
+                                    },
+                                    children: [
+                                        {
+                                            text: {
+                                                name: "Bye",
+                                                title: 15
+                                            },
+                                            HTMLclass: "first-draw bye"
+                                        },
+                                        {
+                                            text: {
+                                                name: "Del Potro, Juan Martin",
+                                                title: 16
+                                            },
+                                            image: "flags/arg.jpg",
+                                            HTMLclass: "first-draw"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        new Treant( tree_structure );
+    });
+</script>
+</body>
+</html>
