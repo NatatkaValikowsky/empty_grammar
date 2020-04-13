@@ -93,17 +93,22 @@
 //     request.send(preparedData);
 // });
 
-/**
- * todo: ВОЗВРАЩАЕТ UNDEFINED
- */
+function grammarNode(txt, lvl, par){
+    this.txt = txt;
+    this.lvl = lvl;
+    this.par =  par;
+    this.isFull = false;
+}
 
 var data = {
-    noTerminals: "a, s",
-    targetSymbol: "a",
-    terminals: "A, {{},B, C",
+    noTerminals: "<число>,<чс>,<цифра>",
+    targetSymbol: "<число>",
+    terminals: "0,1,2,3,4,5,6,7,8,9,-,+",
     rules: [
-        "a->Cs",
-        "s->A|B"
+        "<число>-><чс>|+<чс>|-<чс>",
+        "<чс>-><цифра>|<чс><цифра>",
+        "<цифра>->0|1|2|3|4|5|6|7|8|9"
+
     ]
 };
 
@@ -127,12 +132,11 @@ function mainAlgorythm(data){
         };
     }
 
-    let regex = new RegExp('^' + targetSymbol + '\\->');
-
     let targetHasRule = false;
 
     for(let i = 0; i < rules.length; i++){
-        if(rules[i].match(regex) !== null){
+        let leftPart = rules[i].replace(/->.+$/, '');
+        if(leftPart.indexOf(targetSymbol) !== -1){
             targetHasRule = true;
         }
     }
@@ -161,6 +165,117 @@ function mainAlgorythm(data){
             msg: "Множества терминалов и нетерминалов не должны пересекаться"
         };
     }
+
+    //проверяем правильность задания грамматики
+
+    let areRulesCorrect = true;
+
+    for(let i = 0; i < noTerminals.length; i++){
+        let hasCorrectRule = false;
+
+        for(let j = 0; j < rules.length; j++){
+            let leftPart = rules[j].replace(/->.+$/, ''),
+                rightPart = rules[j].replace(/^.+->/, ''),
+                contains = leftPart.match(noTerminals[i]) !== null;
+
+
+            if(contains){
+                hasCorrectRule = true;
+            }
+
+            //Правила для терминалов
+            for(let k = 0; k < terminals.length; k++){
+                let regex = new RegExp(terminals[k].replace('+', '\\+'));
+                if(leftPart.match(regex) !== null && rightPart.match(regex) === null){
+                    areRulesCorrect = false;
+                }
+            }
+        }
+
+        if(!hasCorrectRule && areRulesCorrect){
+            areRulesCorrect = false;
+        }
+    }
+
+    if(!areRulesCorrect){
+        return {
+            status: 'error',
+            msg: "Для каждого нетерминального символа должно быть хотя бы одно правило, содержащее его в левой части. Если в левой части содержится терминальный символ, то в правой части он тоже должен содержаться"
+        };
+    }
+
+    let verifiedRules = [];
+
+    for(let i = 0; i < rules.length; ++i){
+        if(rules[i].indexOf('|') !== -1){
+            let rightPart = rules[i].replace(/^.+->/, ''),
+                leftPart = rules[i].replace(/->.+$/, ''),
+                arrayRules = rightPart.split('|');
+
+            if(arrayRules.length !== 0){
+                arrayRules.forEach(function (el) {
+                    verifiedRules.push(leftPart + '->' + el);
+                });
+            }
+        } else{
+            verifiedRules.push(rules[i]);
+        }
+    }
+
+    let nodeStructure = {
+        root: new grammarNode(targetSymbol, 1, null)
+        },
+
+        currentSymbol = nodeStructure.root;
+
+    while(!nodeStructure.root.isFull){
+        let currentSymInVN = false;
+        noTerminals.forEach(function (el) {
+            if(currentSymbol.txt.indexOf(el) !== -1){
+                currentSymInVN = el;
+            }
+        });
+
+        if(currentSymbol.lvl < 5 && currentSymInVN){
+
+            if(currentSymbol.children !== undefined){
+                let emptyChild = null;
+
+                for(let i = 0; i < currentSymbol.children.length; ++i){
+                    if(!currentSymbol.children[i].isFull){
+                        emptyChild = currentSymbol.children[i];
+                    }
+                }
+
+                if(emptyChild !== null){
+                    currentSymbol = emptyChild;
+                } else{
+                    currentSymbol.isFull = true;
+                    currentSymbol = currentSymbol.par;
+                }
+            } else{
+
+                verifiedRules.forEach(function (el) {
+                    let leftPart = el.replace(/->.+$/, '');
+
+                        if(leftPart.indexOf(currentSymInVN) !== -1){
+                            if(currentSymbol.children !== undefined){
+                                currentSymbol.children.push(new grammarNode(el.replace(/^.+->/, ''), currentSymbol.lvl + 1, currentSymbol))
+                            } else{
+                                currentSymbol.children = [new grammarNode(el.replace(/^.+->/, ''), currentSymbol.lvl + 1, currentSymbol)]
+                            }
+                    }
+                });
+            }
+        } else{
+            currentSymbol.isFull = true;
+            currentSymbol = currentSymbol.par;
+        }
+
+        //currentSymbol.isFull = true;
+    }
+
+    return nodeStructure;
 }
 
 console.log(mainAlgorythm(data));
