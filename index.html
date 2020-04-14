@@ -4,8 +4,24 @@
     <title>Построение дерева вывода</title>
     <meta charset="utf-8" />
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/Treant.css">
     <link rel="stylesheet" href="/style.css">
 </head>
+
+<style>
+    body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+    table { border-collapse:collapse; border-spacing:0; }
+    fieldset,img { border:0; }
+    address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+    caption,th { text-align:left; }
+    h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+    q:before,q:after { content:''; }
+    abbr,acronym { border:0; }
+
+    body { background: #fff;  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
+    /* optional Container STYLES */
+    .chart { height: 600px; width: 900px; margin: 5px; margin: 15px auto; border: 3px solid #DDD; border-radius: 3px; }
+</style>
 <body>
 
 <div class="sections">
@@ -15,36 +31,44 @@
 
             <label><b>VT</b> (алфавит)</label></br>
             <span>Введите данные через запятую</span>
-            <input type="text" name="vt" /></br></br>
+            <input type="text" name="vt" value="0,1,2,3,4,5,6,7,8,9,-,+" /></br></br>
 
             <label><b>VN</b> (нетерминальные символы)</label></br>
             <span>Введите данные через запятую</span>
-            <input type="text" name="vn" /></br></br>
+            <input type="text" name="vn" value="<число>,<чс>,<цифра>" /></br></br>
 
             <label><b>P</b> (правила)</label></br>
             <span>Введите данные в форме a->aA|bA если нужно добавить или удалить правило, воспользуйтесь кнопками</span>
             <div class="rule-block">
                 <div class="rule-1">
-                    <input type="text" name="rule1" /><i title="Удалить правило" class="fa fa-trash delete rule-control" aria-hidden="true"></i>
+                    <input type="text" name="rule1" value="<число>-><чс>|+<чс>|-<чс>" /><i title="Удалить правило" class="fa fa-trash delete rule-control" aria-hidden="true"></i>
+                </div>
+                <div class="rule-2">
+                    <input type="text" name="rule2" value="<чс>-><цифра>|<чс><цифра>" /><i title="Удалить правило" class="fa fa-trash delete rule-control" aria-hidden="true"></i>
+                </div>
+                <div class="rule-3">
+                    <input type="text" name="rule3" value="<цифра>->0|1|2|3|4|5|6|7|8|9" /><i title="Удалить правило" class="fa fa-trash delete rule-control" aria-hidden="true"></i>
                 </div>
             </div>
             <i title="Добавить правило" class="fa fa-plus add rule-control" aria-hidden="true"></i></br>
 
             <label class="s"><b>S</b> (целевой символ)</label></br>
             <select name="s" id="">
-                <option value="no">Не выбран</option>
+                <option selected value="<число>"><число></option>
             </select>
 
             <br/><br/>
 
             <button type="submit" id="submit">Построить</button>
+            <div class="status"></div>
         </form>
     </div>
-    <div class="block result">
-        Здесь будет вывод результата
+    <div class="block result" id="tree-result">
     </div>
 </div>
 <script src="/mainScript.js"></script>
 <script src="https://use.fontawesome.com/76adb912f2.js"></script>
+<script src="/libs/vendor/raphael.js"></script>
+<script src="/Treant.js"></script>
 </body>
 <html>
